@@ -1,0 +1,17 @@
+#!/bin/bash
+
+MYUSER=`whoami` 
+echo ${MYUSER}
+
+MYPID1=`ps -u ${MYUSER} | grep demo |awk {'print $1'}`
+MYPID2=`ps -u ${MYUSER} | grep upload |awk {'print $1'}`
+MYPID3=`ps -u ${MYUSER} | grep data |awk {'print $1'}`
+
+echo $MYPID1
+echo $MYPID2
+echo $MYPID3
+
+kill -9  $MYPID1
+kill -9  $MYPID2
+kill -9  $MYPID3
+
