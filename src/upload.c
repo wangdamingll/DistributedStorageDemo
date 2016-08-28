@@ -377,11 +377,16 @@ int storageRedis(char* file_info ,char * file_id ,char* fileHttp, char* filename
     redisContext* conn =NULL;
     char value[FILE_ID_LEN] ={0};
     char file_create_time[FILE_ID_LEN] ={0};
+    char file_path[FILE_ID_LEN]={0};
     
     conn = rop_connectdb_nopwd(REDIS_IP, REDIS_PORT);
     if(conn == NULL)
     {
        LOG(MADULENAME,PROCNAME,"storageRedis:rop_connectdb_nopwd:error");
+       
+       	//删除文件
+		sprintf(file_path,"%s/source/%s",SOURCES_FILE_PATH,filename);
+		unlink(file_path);   
        return 2;
     }
     LOG(MADULENAME,PROCNAME,"storageRedis:rop_connectdb_nopwd:sucess");
