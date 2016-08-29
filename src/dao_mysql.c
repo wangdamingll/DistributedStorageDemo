@@ -32,7 +32,7 @@ void process_result_set(MYSQL *conn,MYSQL_RES *res_set)
     }
 }
 
-MYSQL* msql_conn(char *user_name, char* passwd, char *db_name)
+MYSQL* msql_conn(char *user_name, char * host_ip,char* passwd, char *db_name)
 {
     MYSQL *conn = NULL;
     
@@ -40,6 +40,8 @@ MYSQL* msql_conn(char *user_name, char* passwd, char *db_name)
     uint opt_port_num = 0;               /*端口 使用内建值*/
     char *opt_socket_name = NULL;        /*socket name (use build-in value)*/
     uint opt_flags = 0;                  /*连接参数*/
+
+	opt_host_name=host_ip;
 
     conn = mysql_init(NULL);
     if (conn == NULL) {

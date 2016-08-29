@@ -10,6 +10,14 @@
 #include "cJSON.h"
 #include "dao_mysql.h"
 #include "util_cgi.h"
+#include "make_log.h"
+
+#define MADULENAME "fastCGI"
+#define PROCNAME   "reg"
+
+#define MYSQL_HOST_IP "101.200.170.178"
+#define MYSQL_PASSWD "wangdaming"
+#define MYSQL_DBNAME "itcast"
 
 extern char g_host_name[HOST_NAME_LEN];
 
@@ -41,8 +49,9 @@ void deal_reg_query(void)
     query_parse_key_value(query_string, "email", email, NULL);
 
     //入库 
-    MYSQL *conn = msql_conn("root", "177696", "itcast");
+    MYSQL *conn = msql_conn("root", MYSQL_HOST_IP,MYSQL_PASSWD, MYSQL_DBNAME);
     if (conn == NULL) {
+    	LOG(MADULENAME , PROCNAME,"deal_reg_query:msql_conn:error"); 
         return;
     }
 
@@ -50,7 +59,8 @@ void deal_reg_query(void)
             "user", user, flower_name, pwd, tel, time_str ,email);
 
     if (mysql_query(conn, buffer))  {
-        print_error(conn, "插入失败");
+    	LOG(MADULENAME , PROCNAME,"deal_reg_query:mysql_query:error"); 
+    	 return;
     }
 
 

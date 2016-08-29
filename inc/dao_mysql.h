@@ -14,6 +14,6 @@ void print_error(MYSQL *conn, const char *title);
 
 void process_result_set(MYSQL *conn,MYSQL_RES *res_set);
 
-MYSQL* msql_conn(char *user_name, char* passwd, char *db_name);
+MYSQL* msql_conn(char *user_name,char*host_ip, char* passwd, char *db_name);
 
 #endif

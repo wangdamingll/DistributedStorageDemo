@@ -9,8 +9,12 @@
 #include "cJSON.h"
 #include "dao_mysql.h"
 
-#define LOGIN_LOG_MODULE "cgi"
-#define LOGIN_LOG_PROC   "login"
+#define MADULENAME "fastCGI"
+#define PROCNAME   "login"
+
+#define MYSQL_HOST_IP "101.200.170.178"
+#define MYSQL_PASSWD "wangdaming"
+#define MYSQL_DBNAME "itcast"
 
 int return_login_status(char *status_num)
 {
@@ -32,12 +36,12 @@ int process_result(MYSQL *conn, MYSQL_RES *res_set, char *pwd)
 
 
     if (mysql_errno(conn) != 0) {
-        LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC, "mysql_fetch_row() failed");
+        LOG(MADULENAME, PROCNAME, "mysql_fetch_row() failed");
         return -1;
     }
 
     line = mysql_num_rows(res_set);
-    LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC, "%lu rows returned \n", line);
+  
     if (line == 0) {
         return -1;
     }
@@ -46,15 +50,13 @@ int process_result(MYSQL *conn, MYSQL_RES *res_set, char *pwd)
     while ((row = mysql_fetch_row(res_set)) != NULL) {
         for (i = 0; i<mysql_num_fields(res_set); i++)  {
             if (row[i] != NULL) {
-                LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC, "%d row is %s", i, row[i]);
+                LOG(MADULENAME, PROCNAME, "%d row is %s", i, row[i]);
                 if (strcmp(row[i], pwd) == 0) {
                     return 0;
                 }
             }
         }
     }
-
-    
 
     return -1;
 }
@@ -64,7 +66,7 @@ int check_username(char *username, char *pwd)
     char sql_cmd[SQL_MAX_LEN] = {0};
     int retn = 0;
 
-    MYSQL *conn = msql_conn("root", "177696", "itcast");
+    MYSQL *conn = msql_conn("root",MYSQL_HOST_IP,MYSQL_PASSWD, MYSQL_DBNAME);
     if (conn == NULL) {
         return -1;
     }
@@ -72,7 +74,7 @@ int check_username(char *username, char *pwd)
     sprintf(sql_cmd, "select password from user where u_name=\"%s\"", username);
 
     if (mysql_query(conn, sql_cmd)) {
-        LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC,"[-]%s error!", sql_cmd);
+        LOG(MADULENAME, PROCNAME,"[-]%s error!", sql_cmd);
         retn = -1;
         goto END;
     }
@@ -80,7 +82,7 @@ int check_username(char *username, char *pwd)
         MYSQL_RES *res_set;
         res_set = mysql_store_result(conn);/*生成结果集*/
         if (res_set == NULL) {
-            LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC,"mysql_store_result error!", sql_cmd);
+            LOG(MADULENAME, PROCNAME,"mysql_store_result error!", sql_cmd);
             retn = -1;
             goto END;
         }
@@ -117,9 +119,6 @@ int main(int argc, char *argv[])
         query_parse_key_value(query, "pwd", password, NULL);
         query_parse_key_value(query, "type", login_type, NULL);
 
-        LOG(LOGIN_LOG_MODULE, LOGIN_LOG_PROC, "login:[user=%s,pwd=%s,type=%s]", username, password, login_type);
-
-
         //做登陆判断
         retn = check_username(username, password);
         if (retn == 0) {
@@ -129,7 +128,7 @@ int main(int argc, char *argv[])
         else {
             return_login_status("001");
         }
-        
+       
 
     }
 

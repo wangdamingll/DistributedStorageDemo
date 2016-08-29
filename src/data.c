@@ -352,10 +352,7 @@ int  create_Json_objects(File_Info* file_info,int file_num)
 	cJSON *root,*thm,*fld;
 	char *out;
 	int i ;
-	
-	LOG(MADULENAME,PROCNAME,"create_Json_objects:file.file_info[0]->pv:%d",file_info[0].pv);
-	
-	
+
 	root=cJSON_CreateObject();	
 	cJSON_AddItemToObject(root, "games", thm=cJSON_CreateArray());
 	
