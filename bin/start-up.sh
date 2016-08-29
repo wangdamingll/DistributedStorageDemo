@@ -6,7 +6,7 @@ spawn-fcgi   -a  127.0.0.1   -p  8016    -f  ./reg_cgi
 spawn-fcgi   -a  127.0.0.1   -p  8017    -f  ./login_cgi
 
 #启动redis服务器
-#redis-server ./conf/redis.conf
+redis-server /home/itcast/redis/redis-3.2.1/redis.conf --protected-mode no
 
 #启动mySQL服务器
 

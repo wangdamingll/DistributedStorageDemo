@@ -34,7 +34,8 @@ extern char **environ;
 #define QUERY_STRING_LEN 100
 #define FILE_HOT    3
 
-#define REDIS_IP	"101.200.170.178"
+//#define REDIS_IP	"101.200.170.178"
+#define REDIS_IP	"127.0.0.1"
 #define REDIS_PORT	"6379"
 
 #define FILE_INFO_TABLE_KEY "FILE_INFO_LIST"
